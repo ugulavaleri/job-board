@@ -21,7 +21,9 @@
             <ul class="flex space-x-2">
                 @auth
                     <li>
-                        {{ auth()->user()->name ?? 'Anynomus' }}
+                        <a href="{{ route("my_job_applications.index")}}">
+                            {{ auth()->user()->name ?? 'Anynomus' }} : applications
+                        </a>
                     </li>
                     <li>
                         <form action="{{ route('auth.destroy') }}" method="POST">
@@ -45,7 +47,6 @@
                 <p>{{ session('success') }}</p>
             </div>
         @endif
-
         {{ $slot }}
     </body>
 </html>
