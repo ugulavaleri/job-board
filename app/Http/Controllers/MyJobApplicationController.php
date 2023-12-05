@@ -1,17 +1,25 @@
 <?php
 
-namespace App\Http\Controllers;
+    namespace App\Http\Controllers;
 
-class MyJobApplicationController extends Controller
-{
-    public function index()
+    use App\Models\JobApplication;
+
+    class MyJobApplicationController extends Controller
     {
-        return view('my_job_application.index',[
-            'applications' => auth()->user()->jobApplications()->with('job.employee')->get()
-        ]);
+        public function index()
+        {
+            return view("my_job_applications.index", [
+                'applications' => auth()->user()->jobapplications()->latest()->with([
+                    'job' => fn($query) => $query->withCount('jobApplications')->withAvg('jobApplications','expected_salary'),
+                ])->get()
+            ]);
+        }
+
+        public function destroy(JobApplication $my_job_application)
+        {
+            $my_job_application->delete();
+            return redirect()->back()->with([
+                'success' => 'Application canceled successfully!'
+            ]);
+        }
     }
-    public function destroy(string $id)
-    {
-        //
-    }
-}
