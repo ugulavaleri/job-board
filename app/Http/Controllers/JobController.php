@@ -22,7 +22,7 @@
             ]);
 
             return view('job.index', [
-                'jobs' => Job::filter($filters)->get(),
+                'jobs' => Job::latest()->filter($filters)->get(),
             ]);
         }
 

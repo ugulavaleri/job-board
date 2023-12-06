@@ -14,7 +14,6 @@
                     <p>Already applied to this Job!</p>
                 </div>
             @endcan
-
         </div>
     </x-job-card>
     <x-card class="mb-4">
