@@ -18,7 +18,7 @@ return new class extends Migration
 
             // ორივე რელაცია წაიშლება თუ User ან Job წაიშლება.
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Job::class)->constrained();
+            $table->foreignIdFor(Job::class)->constrained()->onDelete('cascade');
             $table->string('expected_salary');
 
             $table->timestamps();

@@ -12,7 +12,15 @@ class MyJobController extends Controller
      */
     public function index()
     {
-        return view('my_job.index');
+        $jobs = auth()->user()->employer->jobs()
+            ->with(['employee','jobApplications','jobApplications.user'])
+            ->withTrashed()
+            ->latest()
+            ->get();
+
+        return view('my_job.index',[
+            'jobs' => $jobs
+        ]);
     }
 
     /**
@@ -53,24 +61,42 @@ class MyJobController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Job $myJob)
     {
-        //
+        return view('my_job.edit',[
+            'job' => $myJob
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Job $myJob)
     {
-        //
+        $data = $request->only([
+            'title',
+            'location',
+            'salary',
+            'description',
+            'experience',
+            'category'
+        ]);
+        $myJob->update($data);
+
+        return redirect()
+            ->route('my-job.index')
+            ->with('success','edited successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Job $myJob)
     {
-        //
+        $myJob->delete();
+
+        return redirect()
+            ->route('my-job.index')
+            ->with('success','Removed Successfully!');
     }
 }
